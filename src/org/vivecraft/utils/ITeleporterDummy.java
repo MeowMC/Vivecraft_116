@@ -19,32 +19,30 @@
 
 package org.vivecraft.utils;
 
-import java.util.function.Function;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.ServerPlayerEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import java.util.function.Function;
+
 /**
  * Interface for handling the placement of entities during dimension change.
- *
+ * <p>
  * An implementation of this interface can be used to place the entity
  * in a safe location, or generate a return portal, for instance.
- *
+ * <p>
  * See the {@link net.minecraft.world.Teleporter} class, which has
  * been patched to implement this interface, for a vanilla example.
  */
-public interface ITeleporterDummy
-{
+public interface ITeleporterDummy {
     /**
      * Called to handle placing the entity in the new world.
-     *
+     * <p>
      * The initial position of the entity will be its
      * position in the origin world, multiplied horizontally
      * by the computed cross-dimensional movement factor
      * (see {@link WorldProvider#getMovementFactor()}).
-     *
+     * <p>
      * Note that the supplied entity has not yet been spawned
      * in the destination world at the time.
      *
@@ -55,13 +53,12 @@ public interface ITeleporterDummy
     void placeEntity(World world, Entity entity, float yaw);
 
     // used internally to handle vanilla hardcoding
-    default boolean isVanilla()
-    {
+    default boolean isVanilla() {
         return true; //whatever
     }
 
-	
+
     default Entity placeEntity(Entity entity, ServerWorld currentWorld, ServerWorld destWorld, float yaw, Function<Boolean, Entity> repositionEntity) {
         return repositionEntity.apply(true);
-     }
+    }
 }

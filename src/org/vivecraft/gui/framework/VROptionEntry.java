@@ -1,10 +1,9 @@
 package org.vivecraft.gui.framework;
 
-import java.util.function.BiFunction;
-
+import net.minecraft.util.math.vector.Vector2f;
 import org.vivecraft.settings.VRSettings;
 
-import net.minecraft.util.math.vector.Vector2f;
+import java.util.function.BiFunction;
 
 public class VROptionEntry {
     public final VRSettings.VrOptions option;

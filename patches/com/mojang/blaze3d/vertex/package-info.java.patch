@@ -1,0 +1,9 @@
+--- a/com/mojang/blaze3d/vertex/package-info.java
++++ b/com/mojang/blaze3d/vertex/package-info.java
+@@ -3,4 +3,5 @@
+ package com.mojang.blaze3d.vertex;
+ 
+ import mcp.MethodsReturnNonnullByDefault;
++
+ import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file

@@ -1,0 +1,10 @@
+--- a/com/mojang/blaze3d/systems/IRenderCall.java
++++ b/com/mojang/blaze3d/systems/IRenderCall.java
+@@ -1,6 +1,5 @@
+ package com.mojang.blaze3d.systems;
+ 
+-public interface IRenderCall
+-{
++public interface IRenderCall {
+     void execute();
+ }

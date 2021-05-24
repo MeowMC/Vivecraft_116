@@ -1,0 +1,70 @@
+--- a/net/optifine/gui/GuiChatOF.java
++++ b/net/optifine/gui/GuiChatOF.java
+@@ -5,55 +5,39 @@
+ import net.optifine.Config;
+ import net.optifine.shaders.Shaders;
+ 
+-public class GuiChatOF extends ChatScreen
+-{
++public class GuiChatOF extends ChatScreen {
+     private static final String CMD_RELOAD_SHADERS = "/reloadShaders";
+     private static final String CMD_RELOAD_CHUNKS = "/reloadChunks";
+ 
+-    public GuiChatOF(ChatScreen guiChat)
+-    {
++    public GuiChatOF(ChatScreen guiChat) {
+         super(VideoSettingsScreen.getGuiChatText(guiChat));
+     }
+ 
+-    public void sendMessage(String msg)
+-    {
+-        if (this.checkCustomCommand(msg))
+-        {
++    public void sendMessage(String msg) {
++        if (this.checkCustomCommand(msg)) {
+             this.minecraft.ingameGUI.getChatGUI().addToSentMessages(msg);
+-        }
+-        else
+-        {
++        } else {
+             super.sendMessage(msg);
+         }
+     }
+ 
+-    private boolean checkCustomCommand(String msg)
+-    {
+-        if (msg == null)
+-        {
++    private boolean checkCustomCommand(String msg) {
++        if (msg == null) {
+             return false;
+-        }
+-        else
+-        {
++        } else {
+             msg = msg.trim();
+ 
+-            if (msg.equals("/reloadShaders"))
+-            {
+-                if (Config.isShaders())
+-                {
++            if (msg.equals("/reloadShaders")) {
++                if (Config.isShaders()) {
+                     Shaders.uninit();
+                     Shaders.loadShaderPack();
+                 }
+ 
+                 return true;
+-            }
+-            else if (msg.equals("/reloadChunks"))
+-            {
++            } else if (msg.equals("/reloadChunks")) {
+                 this.minecraft.worldRenderer.loadRenderers();
+                 return true;
+-            }
+-            else
+-            {
++            } else {
+                 return false;
+             }
+         }

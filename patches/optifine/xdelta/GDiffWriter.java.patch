@@ -1,0 +1,169 @@
+--- a/optifine/xdelta/GDiffWriter.java
++++ b/optifine/xdelta/GDiffWriter.java
+@@ -3,15 +3,13 @@
+ import java.io.DataOutputStream;
+ import java.io.IOException;
+ 
+-public class GDiffWriter implements DiffWriter
+-{
++public class GDiffWriter implements DiffWriter {
++    protected boolean debug = false;
+     byte[] buf = new byte[256];
+     int buflen = 0;
+-    protected boolean debug = false;
+     DataOutputStream output = null;
+ 
+-    public GDiffWriter(DataOutputStream os) throws IOException
+-    {
++    public GDiffWriter(DataOutputStream os) throws IOException {
+         this.output = os;
+         this.output.writeByte(209);
+         this.output.writeByte(255);
+@@ -20,72 +18,52 @@
+         this.output.writeByte(4);
+     }
+ 
+-    public void setDebug(boolean flag)
+-    {
++    public void setDebug(boolean flag) {
+         this.debug = flag;
+     }
+ 
+-    public void addCopy(int offset, int length) throws IOException
+-    {
+-        if (this.buflen > 0)
+-        {
++    public void addCopy(int offset, int length) throws IOException {
++        if (this.buflen > 0) {
+             this.writeBuf();
+         }
+ 
+-        if (this.debug)
+-        {
++        if (this.debug) {
+             System.err.println("COPY off: " + offset + ", len: " + length);
+         }
+ 
+-        if (offset > Integer.MAX_VALUE)
+-        {
++        if (offset > Integer.MAX_VALUE) {
+             this.output.writeByte(255);
+-        }
+-        else if (offset < 65536)
+-        {
+-            if (length < 256)
+-            {
++        } else if (offset < 65536) {
++            if (length < 256) {
+                 this.output.writeByte(249);
+                 this.output.writeShort(offset);
+                 this.output.writeByte(length);
+-            }
+-            else if (length > 65535)
+-            {
++            } else if (length > 65535) {
+                 this.output.writeByte(251);
+                 this.output.writeShort(offset);
+                 this.output.writeInt(length);
+-            }
+-            else
+-            {
++            } else {
+                 this.output.writeByte(250);
+                 this.output.writeShort(offset);
+                 this.output.writeShort(length);
+             }
+-        }
+-        else if (length < 256)
+-        {
++        } else if (length < 256) {
+             this.output.writeByte(252);
+             this.output.writeInt(offset);
+             this.output.writeByte(length);
+-        }
+-        else if (length > 65535)
+-        {
++        } else if (length > 65535) {
+             this.output.writeByte(254);
+             this.output.writeInt(offset);
+             this.output.writeInt(length);
+-        }
+-        else
+-        {
++        } else {
+             this.output.writeByte(253);
+             this.output.writeInt(offset);
+             this.output.writeShort(length);
+         }
+     }
+ 
+-    public void addData(byte b) throws IOException
+-    {
+-        if (this.buflen >= 246)
+-        {
++    public void addData(byte b) throws IOException {
++        if (this.buflen >= 246) {
+             this.writeBuf();
+         }
+ 
+@@ -93,29 +71,22 @@
+         ++this.buflen;
+     }
+ 
+-    private void writeBuf() throws IOException
+-    {
+-        if (this.debug)
+-        {
++    private void writeBuf() throws IOException {
++        if (this.debug) {
+             System.err.print("DATA:");
+ 
+-            for (int i = 0; i < this.buflen; ++i)
+-            {
+-                if (this.buf[i] == 10)
+-                {
++            for (int i = 0; i < this.buflen; ++i) {
++                if (this.buf[i] == 10) {
+                     System.err.print("\\n");
+-                }
+-                else
+-                {
+-                    System.err.print(String.valueOf((char)this.buf[i]));
++                } else {
++                    System.err.print((char) this.buf[i]);
+                 }
+             }
+ 
+-            System.err.println("");
++            System.err.println();
+         }
+ 
+-        if (this.buflen > 0)
+-        {
++        if (this.buflen > 0) {
+             this.output.writeByte(this.buflen);
+             this.output.write(this.buf, 0, this.buflen);
+         }
+@@ -123,10 +94,8 @@
+         this.buflen = 0;
+     }
+ 
+-    public void flush() throws IOException
+-    {
+-        if (this.buflen > 0)
+-        {
++    public void flush() throws IOException {
++        if (this.buflen > 0) {
+             this.writeBuf();
+         }
+ 
+@@ -134,8 +103,7 @@
+         this.output.flush();
+     }
+ 
+-    public void close() throws IOException
+-    {
++    public void close() throws IOException {
+         this.flush();
+     }
+ }

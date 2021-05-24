@@ -1,0 +1,33 @@
+--- a/optifine/json/Yytoken.java
++++ b/optifine/json/Yytoken.java
+@@ -1,7 +1,6 @@
+ package optifine.json;
+ 
+-public class Yytoken
+-{
++public class Yytoken {
+     public static final int TYPE_VALUE = 0;
+     public static final int TYPE_LEFT_BRACE = 1;
+     public static final int TYPE_RIGHT_BRACE = 2;
+@@ -13,18 +12,15 @@
+     public int type = 0;
+     public Object value = null;
+ 
+-    public Yytoken(int type, Object value)
+-    {
++    public Yytoken(int type, Object value) {
+         this.type = type;
+         this.value = value;
+     }
+ 
+-    public String toString()
+-    {
++    public String toString() {
+         StringBuffer stringbuffer = new StringBuffer();
+ 
+-        switch (this.type)
+-        {
++        switch (this.type) {
+             case -1:
+                 stringbuffer.append("END OF FILE");
+                 break;

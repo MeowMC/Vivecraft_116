@@ -1,0 +1,19 @@
+--- a/optifine/xdelta/DeltaException.java
++++ b/optifine/xdelta/DeltaException.java
+@@ -1,13 +1,10 @@
+ package optifine.xdelta;
+ 
+-public class DeltaException extends Exception
+-{
+-    public DeltaException()
+-    {
++public class DeltaException extends Exception {
++    public DeltaException() {
+     }
+ 
+-    public DeltaException(String msg)
+-    {
++    public DeltaException(String msg) {
+         super(msg);
+     }
+ }

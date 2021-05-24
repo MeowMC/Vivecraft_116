@@ -1,5 +1,9 @@
 package org.vivecraft.render;
 
+import org.apache.commons.io.IOUtils;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -9,38 +13,15 @@ import java.nio.IntBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 /**
  * User: The Grey Ghost
  * Date: 9/02/14
  */
-public class OpenGLdebugging
-{
+public class OpenGLdebugging {
+    public static OpenGLdebugging instance = new OpenGLdebugging();
     private static Map<String, Boolean> dumpedComplete = new HashMap<String, Boolean>();
     private static Map<String, Boolean> dumped = new HashMap<String, Boolean>();
     private static Map<String, Boolean> dumpedType = new HashMap<String, Boolean>();
-
-    public class GLproperty
-    {
-        public GLproperty(int init_gLconstant, String init_name, String init_description, String init_category, String init_fetchCommand) {
-            gLconstant = init_gLconstant;
-            name = init_name;
-            description = init_description;
-            category = init_category;
-            fetchCommand = init_fetchCommand;
-        }
-
-        public int gLconstant;
-        public String name;
-        public String description;
-        public String category;
-        public String fetchCommand;
-    };
-
-    public static OpenGLdebugging instance = new OpenGLdebugging();
 
     public GLproperty[] propertyList = {
             new GLproperty(GL11.GL_CURRENT_COLOR, "GL_CURRENT_COLOR", "Current color", "current", "glGetFloatv()"),
@@ -300,22 +281,18 @@ public class OpenGLdebugging
             new GLproperty(GL11.GL_FEEDBACK_BUFFER_TYPE, "GL_FEEDBACK_BUFFER_TYPE", "Type of feedback buffer", "feedback", "glGetIntegerv()"),
     };
 
-
-
-    public static String dumpOpenGLstate()
-    {
+    public static String dumpOpenGLstate() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < instance.propertyList.length; ++i) {
-                builder.append(instance.propertyList[i].name + ":");
-                builder.append(GL11.glIsEnabled(instance.propertyList[i].gLconstant) + ":");
-                builder.append(getPropertyAsString(i));
-                builder.append(" (" + instance.propertyList[i].description + ")\n");
+            builder.append(instance.propertyList[i].name + ":");
+            builder.append(GL11.glIsEnabled(instance.propertyList[i].gLconstant) + ":");
+            builder.append(getPropertyAsString(i));
+            builder.append(" (" + instance.propertyList[i].description + ")\n");
         }
         return builder.toString();
     }
 
-    public static void dumpOpenGLstateToFile(String filename)
-    {
+    public static void dumpOpenGLstateToFile(String filename) {
         String msg = dumpOpenGLstate();
         try {
             FileOutputStream output = new FileOutputStream(new File(filename));
@@ -325,16 +302,14 @@ public class OpenGLdebugging
         }
     }
 
-    public static void dumpOpenGLstateToFileOnce(String filename)
-    {
+    public static void dumpOpenGLstateToFileOnce(String filename) {
         if (dumpedComplete.get(filename) == null) {
             dumpOpenGLstateToFile(filename);
             dumpedComplete.put(filename, true);
         }
     }
 
-    public static String dumpAllIsEnabled()
-    {
+    public static String dumpAllIsEnabled() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < instance.propertyList.length; ++i) {
             if (instance.propertyList[i].fetchCommand == "glIsEnabled()") {
@@ -346,8 +321,7 @@ public class OpenGLdebugging
         return builder.toString();
     }
 
-    public static void dumpAllIsEnabledToFile(String filename)
-    {
+    public static void dumpAllIsEnabledToFile(String filename) {
         String msg = dumpAllIsEnabled();
         try {
             FileOutputStream output = new FileOutputStream(new File(filename));
@@ -357,16 +331,14 @@ public class OpenGLdebugging
         }
     }
 
-    public static void dumpAllIsEnabledToFileOnce(String filename)
-    {
+    public static void dumpAllIsEnabledToFileOnce(String filename) {
         if (dumped.get(filename) == null) {
             dumpAllIsEnabledToFile(filename);
             dumped.put(filename, true);
         }
     }
 
-    public static String dumpAllType(String type)
-    {
+    public static String dumpAllType(String type) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < instance.propertyList.length; ++i) {
             if (instance.propertyList[i].category.equals(type)) {
@@ -378,8 +350,7 @@ public class OpenGLdebugging
         return builder.toString();
     }
 
-    public static void dumpAllTypeToFile(String filename, String type)
-    {
+    public static void dumpAllTypeToFile(String filename, String type) {
         String msg = dumpAllType(type);
         try {
             FileOutputStream output = new FileOutputStream(new File(filename));
@@ -389,16 +360,14 @@ public class OpenGLdebugging
         }
     }
 
-    public static void dumpAllTypeToFileOnce(String filename, String type)
-    {
+    public static void dumpAllTypeToFileOnce(String filename, String type) {
         if (dumpedType.get(filename) == null) {
             dumpAllTypeToFile(filename, type);
             dumpedType.put(filename, true);
         }
     }
 
-    private static String getPropertyAsString(int propertyListIndex)
-    {
+    private static String getPropertyAsString(int propertyListIndex) {
         int gLconstant = instance.propertyList[propertyListIndex].gLconstant;
         if (instance.propertyList[propertyListIndex].fetchCommand.equals("glIsEnabled()")) {
             return "" + GL11.glIsEnabled(gLconstant);
@@ -438,6 +407,21 @@ public class OpenGLdebugging
         }
 
         return "";
+    }
+
+    public class GLproperty {
+        public int gLconstant;
+        public String name;
+        public String description;
+        public String category;
+        public String fetchCommand;
+        public GLproperty(int init_gLconstant, String init_name, String init_description, String init_category, String init_fetchCommand) {
+            gLconstant = init_gLconstant;
+            name = init_name;
+            description = init_description;
+            category = init_category;
+            fetchCommand = init_fetchCommand;
+        }
     }
 
 }

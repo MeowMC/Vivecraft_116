@@ -1,0 +1,204 @@
+--- a/optifine/json/ItemList.java
++++ b/optifine/json/ItemList.java
+@@ -4,75 +4,58 @@
+ import java.util.List;
+ import java.util.StringTokenizer;
+ 
+-public class ItemList
+-{
+-    private String sp = ",";
++public class ItemList {
+     List items = new ArrayList();
++    private String sp = ",";
+ 
+-    public ItemList()
+-    {
++    public ItemList() {
+     }
+ 
+-    public ItemList(String s)
+-    {
++    public ItemList(String s) {
+         this.split(s, this.sp, this.items);
+     }
+ 
+-    public ItemList(String s, String sp)
+-    {
++    public ItemList(String s, String sp) {
+         this.sp = s;
+         this.split(s, sp, this.items);
+     }
+ 
+-    public ItemList(String s, String sp, boolean isMultiToken)
+-    {
++    public ItemList(String s, String sp, boolean isMultiToken) {
+         this.split(s, sp, this.items, isMultiToken);
+     }
+ 
+-    public List getItems()
+-    {
++    public List getItems() {
+         return this.items;
+     }
+ 
+-    public String[] getArray()
+-    {
+-        return (String[])this.items.toArray();
++    public String[] getArray() {
++        return (String[]) this.items.toArray();
+     }
+ 
+-    public void split(String s, String sp, List append, boolean isMultiToken)
+-    {
+-        if (s != null && sp != null)
+-        {
+-            if (isMultiToken)
+-            {
++    public void split(String s, String sp, List append, boolean isMultiToken) {
++        if (s != null && sp != null) {
++            if (isMultiToken) {
+                 StringTokenizer stringtokenizer = new StringTokenizer(s, sp);
+ 
+-                while (stringtokenizer.hasMoreTokens())
+-                {
++                while (stringtokenizer.hasMoreTokens()) {
+                     append.add(stringtokenizer.nextToken().trim());
+                 }
+-            }
+-            else
+-            {
++            } else {
+                 this.split(s, sp, append);
+             }
+         }
+     }
+ 
+-    public void split(String s, String sp, List append)
+-    {
+-        if (s != null && sp != null)
+-        {
++    public void split(String s, String sp, List append) {
++        if (s != null && sp != null) {
+             int i = 0;
+             int j = 0;
+ 
+-            do
+-            {
++            do {
+                 j = i;
+                 i = s.indexOf(sp, i);
+ 
+-                if (i == -1)
+-                {
++                if (i == -1) {
+                     break;
+                 }
+ 
+@@ -85,74 +68,57 @@
+         }
+     }
+ 
+-    public void setSP(String sp)
+-    {
++    public void setSP(String sp) {
+         this.sp = sp;
+     }
+ 
+-    public void add(int i, String item)
+-    {
+-        if (item != null)
+-        {
++    public void add(int i, String item) {
++        if (item != null) {
+             this.items.add(i, item.trim());
+         }
+     }
+ 
+-    public void add(String item)
+-    {
+-        if (item != null)
+-        {
++    public void add(String item) {
++        if (item != null) {
+             this.items.add(item.trim());
+         }
+     }
+ 
+-    public void addAll(ItemList list)
+-    {
++    public void addAll(ItemList list) {
+         this.items.addAll(list.items);
+     }
+ 
+-    public void addAll(String s)
+-    {
++    public void addAll(String s) {
+         this.split(s, this.sp, this.items);
+     }
+ 
+-    public void addAll(String s, String sp)
+-    {
++    public void addAll(String s, String sp) {
+         this.split(s, sp, this.items);
+     }
+ 
+-    public void addAll(String s, String sp, boolean isMultiToken)
+-    {
++    public void addAll(String s, String sp, boolean isMultiToken) {
+         this.split(s, sp, this.items, isMultiToken);
+     }
+ 
+-    public String get(int i)
+-    {
+-        return (String)this.items.get(i);
++    public String get(int i) {
++        return (String) this.items.get(i);
+     }
+ 
+-    public int size()
+-    {
++    public int size() {
+         return this.items.size();
+     }
+ 
+-    public String toString()
+-    {
++    public String toString() {
+         return this.toString(this.sp);
+     }
+ 
+-    public String toString(String sp)
+-    {
++    public String toString(String sp) {
+         StringBuffer stringbuffer = new StringBuffer();
+ 
+-        for (int i = 0; i < this.items.size(); ++i)
+-        {
+-            if (i == 0)
+-            {
++        for (int i = 0; i < this.items.size(); ++i) {
++            if (i == 0) {
+                 stringbuffer.append(this.items.get(i));
+-            }
+-            else
+-            {
++            } else {
+                 stringbuffer.append(sp);
+                 stringbuffer.append(this.items.get(i));
+             }
+@@ -161,13 +127,11 @@
+         return stringbuffer.toString();
+     }
+ 
+-    public void clear()
+-    {
++    public void clear() {
+         this.items.clear();
+     }
+ 
+-    public void reset()
+-    {
++    public void reset() {
+         this.sp = ",";
+         this.items.clear();
+     }

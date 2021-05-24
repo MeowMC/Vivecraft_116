@@ -1,0 +1,10 @@
+--- a/optifine/json/JSONAware.java
++++ b/optifine/json/JSONAware.java
+@@ -1,6 +1,5 @@
+ package optifine.json;
+ 
+-public interface JSONAware
+-{
++public interface JSONAware {
+     String toJSONString();
+ }

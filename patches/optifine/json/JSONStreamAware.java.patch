@@ -1,0 +1,11 @@
+--- a/optifine/json/JSONStreamAware.java
++++ b/optifine/json/JSONStreamAware.java
+@@ -3,7 +3,6 @@
+ import java.io.IOException;
+ import java.io.Writer;
+ 
+-public interface JSONStreamAware
+-{
++public interface JSONStreamAware {
+     void writeJSONString(Writer var1) throws IOException;
+ }

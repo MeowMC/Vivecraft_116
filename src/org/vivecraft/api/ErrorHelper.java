@@ -10,8 +10,7 @@ public class ErrorHelper {
     public String message;
     public String resolution;
 
-    public ErrorHelper(String title, String message, String resolution, long displayTimeSecs)
-    {
+    public ErrorHelper(String title, String message, String resolution, long displayTimeSecs) {
         this.title = "\u00a7e\u00a7l" + title;
         this.message = message;
         this.resolution = resolution;

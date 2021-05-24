@@ -1,0 +1,116 @@
+--- a/optifine/xdelta/SimplePrime.java
++++ b/optifine/xdelta/SimplePrime.java
+@@ -1,34 +1,23 @@
+ package optifine.xdelta;
+ 
+-public class SimplePrime
+-{
+-    private SimplePrime()
+-    {
++public class SimplePrime {
++    private SimplePrime() {
+     }
+ 
+-    public static long belowOrEqual(long number)
+-    {
+-        if (number < 2L)
+-        {
++    public static long belowOrEqual(long number) {
++        if (number < 2L) {
+             return 0L;
+-        }
+-        else if (number == 2L)
+-        {
++        } else if (number == 2L) {
+             return 2L;
+-        }
+-        else
+-        {
+-            if ((number & 1L) == 0L)
+-            {
++        } else {
++            if ((number & 1L) == 0L) {
+                 --number;
+             }
+ 
+-            while (!testPrime(number))
+-            {
++            while (!testPrime(number)) {
+                 number -= 2L;
+ 
+-                if (number <= 2L)
+-                {
++                if (number <= 2L) {
+                     return 2L;
+                 }
+             }
+@@ -37,25 +26,18 @@
+         }
+     }
+ 
+-    public static long aboveOrEqual(long number)
+-    {
+-        if (number <= 2L)
+-        {
++    public static long aboveOrEqual(long number) {
++        if (number <= 2L) {
+             return 2L;
+-        }
+-        else
+-        {
+-            if ((number & 1L) == 0L)
+-            {
++        } else {
++            if ((number & 1L) == 0L) {
+                 ++number;
+             }
+ 
+-            while (!testPrime(number))
+-            {
++            while (!testPrime(number)) {
+                 number += 2L;
+ 
+-                if (number < 0L)
+-                {
++                if (number < 0L) {
+                     return 0L;
+                 }
+             }
+@@ -64,28 +46,18 @@
+         }
+     }
+ 
+-    public static boolean testPrime(long number)
+-    {
+-        if (number == 2L)
+-        {
++    public static boolean testPrime(long number) {
++        if (number == 2L) {
+             return true;
+-        }
+-        else if (number < 2L)
+-        {
++        } else if (number < 2L) {
+             return false;
+-        }
+-        else if ((number & 1L) == 0L)
+-        {
++        } else if ((number & 1L) == 0L) {
+             return false;
+-        }
+-        else
+-        {
+-            long i = (long)Math.floor(Math.sqrt((double)number));
+-
+-            for (long j = 3L; j <= i; j += 2L)
+-            {
+-                if (number % j == 0L)
+-                {
++        } else {
++            long i = (long) Math.floor(Math.sqrt((double) number));
++
++            for (long j = 3L; j <= i; j += 2L) {
++                if (number % j == 0L) {
+                     return false;
+                 }
+             }

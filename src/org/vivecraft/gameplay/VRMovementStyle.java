@@ -4,8 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 
 // VIVE
-public class VRMovementStyle
-{
+public class VRMovementStyle {
+    private static final ResourceLocation beamPng = new ResourceLocation("textures/entity/endercrystal/endercrystal_beam.png");
     public String name;
     public boolean cameraSlide;
     public boolean airSparkles;
@@ -29,17 +29,13 @@ public class VRMovementStyle
     public boolean teleportOnRelease;
     public boolean arcAiming;
 
-    private static final ResourceLocation beamPng = new ResourceLocation("textures/entity/endercrystal/endercrystal_beam.png");
-
-    public VRMovementStyle()
-    {
-        setStyle( "Arc" );
+    public VRMovementStyle() {
+        setStyle("Arc");
     }
 
-    public void setStyle( String requestedStyle ) {
+    public void setStyle(String requestedStyle) {
         boolean changedStyle = true;
-        if (requestedStyle == "Minimal" )
-        {
+        if (requestedStyle == "Minimal") {
             name = requestedStyle;
             cameraSlide = false;
             airSparkles = true;
@@ -50,9 +46,7 @@ public class VRMovementStyle
             endTeleportingSound = "mob.endermen.portal";
             teleportOnRelease = false;
             arcAiming = false;
-        }
-        else if (requestedStyle == "Beam" )
-        {
+        } else if (requestedStyle == "Beam") {
             name = requestedStyle;
             cameraSlide = false;
             airSparkles = true;
@@ -73,9 +67,7 @@ public class VRMovementStyle
             endTeleportingSound = "mob.endermen.portal";
             teleportOnRelease = false;
             arcAiming = false;
-        }
-        else if (requestedStyle == "Tunnel" )
-        {
+        } else if (requestedStyle == "Tunnel") {
             name = requestedStyle;
             cameraSlide = false;
             airSparkles = true;
@@ -96,9 +88,7 @@ public class VRMovementStyle
             endTeleportingSound = "mob.endermen.portal";
             teleportOnRelease = false;
             arcAiming = false;
-        }
-        else if (requestedStyle == "Grapple" )
-        {
+        } else if (requestedStyle == "Grapple") {
             name = requestedStyle;
             cameraSlide = true;
             airSparkles = false;
@@ -120,9 +110,7 @@ public class VRMovementStyle
             endTeleportingSound = "mob.endermen.portal";
             teleportOnRelease = false;
             arcAiming = false;
-        }
-        else if (requestedStyle == "Arc")
-        {
+        } else if (requestedStyle == "Arc") {
             name = requestedStyle;
             cameraSlide = false;
             airSparkles = false;
@@ -142,16 +130,13 @@ public class VRMovementStyle
             endTeleportingSound = null;
             teleportOnRelease = true;
             arcAiming = true;
-        }
-        else
-        {
+        } else {
             changedStyle = false;
             Minecraft.getInstance().printChatMessage("Unknown teleport style requested: " + requestedStyle);
         }
 
-        if (changedStyle && Minecraft.getInstance()!=null)
-        {
-				    Minecraft.getInstance().printChatMessage("Teleport style (RCTRL-M): " + name);
+        if (changedStyle && Minecraft.getInstance() != null) {
+            Minecraft.getInstance().printChatMessage("Teleport style (RCTRL-M): " + name);
         }
     }
 }

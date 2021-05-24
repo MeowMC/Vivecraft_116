@@ -1,80 +1,78 @@
 package org.vivecraft.api;
 
+import net.minecraft.entity.player.PlayerEntity;
+import net.optifine.Config;
+import net.optifine.http.FileDownloadThread;
+import org.vivecraft.render.PlayerModelController;
+
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.vivecraft.render.PlayerModelController;
+public class PatreonReceiver {
+    private static final Object lock = new Object();
+    private static List<PlayerEntity> queuedPlayers = new LinkedList<>();
+    private static Map<String, Integer> cache;
+    private static boolean downloadStarted;
+    private static boolean downloadFailed;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.optifine.Config;
-import net.optifine.http.FileDownloadThread;
+    private static void fileDownloadFinished(String url, byte[] data, Throwable exception) {
+        synchronized (lock) {
+            if (data != null) {
+                try {
+                    HashMap<String, Integer> map = new HashMap<>();
+                    String s = new String(data, StandardCharsets.UTF_8);
 
-public class PatreonReceiver
-{
-	private static final Object lock = new Object();
-	private static List<PlayerEntity> queuedPlayers = new LinkedList<>();
-	private static Map<String, Integer> cache;
-	private static boolean downloadStarted;
-	private static boolean downloadFailed;
+                    String[] lines = s.split("\\r?\\n");
+                    for (String string : lines) {
+                        try {
+                            String[] bits = string.split(":");
+                            int level = Integer.parseInt(bits[1]);
+                            map.put(bits[0], level);
 
-	private static void fileDownloadFinished(String url, byte[] data, Throwable exception) {
-		synchronized (lock) {
-			if (data != null) {
-				try {
-					HashMap<String, Integer> map = new HashMap<>();
-					String s = new String(data, StandardCharsets.UTF_8);
+                            for (PlayerEntity player : queuedPlayers) {
+                                if (bits[0].equalsIgnoreCase(player.getGameProfile().getName())) {
+                                    PlayerModelController.getInstance().setHMD(player.getUniqueID(), level);
+                                }
+                            }
+                        } catch (Exception e) {
+                            System.out.println("error with donors txt " + e.getMessage());
+                        }
+                    }
 
-					String[] lines = s.split("\\r?\\n");
-					for (String string : lines) {
-						try {
-							String[] bits = string.split(":");
-							int level = Integer.parseInt(bits[1]);
-							map.put(bits[0], level);
+                    cache = map;
+                } catch (Exception e) {
+                    Config.dbg("Error parsing data: " + url + ", " + e.getClass().getName() + ": " + e.getMessage());
+                    downloadFailed = true;
+                }
+            } else {
+                downloadFailed = true;
+            }
 
-							for (PlayerEntity player : queuedPlayers) {
-								if (bits[0].equalsIgnoreCase(player.getGameProfile().getName())) {
-									PlayerModelController.getInstance().setHMD(player.getUniqueID(), level);
-								}
-							}
-						} catch (Exception e) {
-							System.out.println("error with donors txt " + e.getMessage());
-						}
-					}
+            queuedPlayers.clear();
+        }
+    }
 
-					cache = map;
-				} catch (Exception e) {
-					Config.dbg("Error parsing data: " + url + ", " + e.getClass().getName() + ": " + e.getMessage());
-					downloadFailed = true;
-				}
-			} else {
-				downloadFailed = true;
-			}
+    public static void addPlayerInfo(PlayerEntity p) {
+        if (downloadFailed)
+            return;
 
-			queuedPlayers.clear();
-		}
-	}
+        synchronized (lock) {
+            if (cache == null) {
+                queuedPlayers.add(p);
+                PlayerModelController.getInstance().setHMD(p.getUniqueID(), 0);
 
-	public static void addPlayerInfo(PlayerEntity p) {
-		if (downloadFailed)
-			return;
-
-		synchronized (lock) {
-			if (cache == null) {
-				queuedPlayers.add(p);
-				PlayerModelController.getInstance().setHMD(p.getUniqueID(), 0);
-
-				if (!downloadStarted) {
-					downloadStarted = true;
-					String s = "http://www.vivecraft.org/patreon/current.txt";
-					FileDownloadThread filedownloadthread = new FileDownloadThread(s, PatreonReceiver::fileDownloadFinished);
-					filedownloadthread.start();
-				}
-			} else {
-				PlayerModelController.getInstance().setHMD(p.getUniqueID(), cache.getOrDefault(p.getGameProfile().getName(), 0));
-			}
-		}
-	}
+                if (!downloadStarted) {
+                    downloadStarted = true;
+                    String s = "http://www.vivecraft.org/patreon/current.txt";
+                    FileDownloadThread filedownloadthread = new FileDownloadThread(s, PatreonReceiver::fileDownloadFinished);
+                    filedownloadthread.start();
+                }
+            } else {
+                PlayerModelController.getInstance().setHMD(p.getUniqueID(), cache.getOrDefault(p.getGameProfile().getName(), 0));
+            }
+        }
+    }
 }

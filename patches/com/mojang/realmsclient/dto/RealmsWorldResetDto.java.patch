@@ -1,0 +1,22 @@
+--- a/com/mojang/realmsclient/dto/RealmsWorldResetDto.java
++++ b/com/mojang/realmsclient/dto/RealmsWorldResetDto.java
+@@ -3,8 +3,7 @@
+ import com.google.gson.annotations.SerializedName;
+ import net.minecraft.realms.IPersistentSerializable;
+ 
+-public class RealmsWorldResetDto extends ValueObject implements IPersistentSerializable
+-{
++public class RealmsWorldResetDto extends ValueObject implements IPersistentSerializable {
+     @SerializedName("seed")
+     private final String field_230628_a_;
+     @SerializedName("worldTemplateId")
+@@ -14,8 +13,7 @@
+     @SerializedName("generateStructures")
+     private final boolean field_230631_d_;
+ 
+-    public RealmsWorldResetDto(String p_i51640_1_, long p_i51640_2_, int p_i51640_4_, boolean p_i51640_5_)
+-    {
++    public RealmsWorldResetDto(String p_i51640_1_, long p_i51640_2_, int p_i51640_4_, boolean p_i51640_5_) {
+         this.field_230628_a_ = p_i51640_1_;
+         this.field_230629_b_ = p_i51640_2_;
+         this.field_230630_c_ = p_i51640_4_;

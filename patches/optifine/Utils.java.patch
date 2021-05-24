@@ -1,0 +1,791 @@
+--- a/optifine/Utils.java
++++ b/optifine/Utils.java
+@@ -1,49 +1,28 @@
+ package optifine;
+ 
+-import java.awt.Component;
+-import java.awt.Dimension;
+-import java.awt.Rectangle;
+-import java.awt.Toolkit;
+-import java.io.BufferedReader;
+-import java.io.ByteArrayOutputStream;
+-import java.io.File;
+-import java.io.FileInputStream;
+-import java.io.FileOutputStream;
+-import java.io.IOException;
+-import java.io.InputStream;
+-import java.io.InputStreamReader;
+-import java.io.OutputStream;
+-import java.io.PrintWriter;
+-import java.io.StringWriter;
++import javax.swing.*;
++import java.awt.*;
++import java.io.*;
+ import java.lang.reflect.Array;
+-import java.util.ArrayList;
+-import java.util.Arrays;
+-import java.util.Collection;
+ import java.util.List;
+-import java.util.StringTokenizer;
+-import javax.swing.JOptionPane;
++import java.util.*;
+ 
+-public class Utils
+-{
++public class Utils {
+     public static final String MAC_OS_HOME_PREFIX = "Library/Application Support";
+-    private static final char[] hexTable = new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
++    private static final char[] hexTable = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
+ 
+-    private Utils()
+-    {
++    private Utils() {
+     }
+ 
+-    public static File getWorkingDirectory()
+-    {
++    public static File getWorkingDirectory() {
+         return getWorkingDirectory("minecraft");
+     }
+ 
+-    public static File getWorkingDirectory(String applicationName)
+-    {
++    public static File getWorkingDirectory(String applicationName) {
+         String s = System.getProperty("user.home", ".");
+         File file1 = null;
+ 
+-        switch (getPlatform().ordinal())
+-        {
++        switch (getPlatform().ordinal()) {
+             case 1:
+             case 2:
+                 file1 = new File(s, '.' + applicationName + '/');
+@@ -52,12 +31,9 @@
+             case 3:
+                 String s1 = System.getenv("APPDATA");
+ 
+-                if (s1 != null)
+-                {
++                if (s1 != null) {
+                     file1 = new File(s1, "." + applicationName + '/');
+-                }
+-                else
+-                {
++                } else {
+                     file1 = new File(s, '.' + applicationName + '/');
+                 }
+ 
+@@ -71,68 +47,47 @@
+                 file1 = new File(s, applicationName + '/');
+         }
+ 
+-        if (!file1.exists() && !file1.mkdirs())
+-        {
++        if (!file1.exists() && !file1.mkdirs()) {
+             throw new RuntimeException("The working directory could not be created: " + file1);
+-        }
+-        else
+-        {
++        } else {
+             return file1;
+         }
+     }
+ 
+-    public static Utils.OS getPlatform()
+-    {
++    public static Utils.OS getPlatform() {
+         String s = System.getProperty("os.name").toLowerCase();
+ 
+-        if (s.contains("win"))
+-        {
++        if (s.contains("win")) {
+             return Utils.OS.WINDOWS;
+-        }
+-        else if (s.contains("mac"))
+-        {
++        } else if (s.contains("mac")) {
+             return Utils.OS.MACOS;
+-        }
+-        else if (s.contains("solaris"))
+-        {
++        } else if (s.contains("solaris")) {
+             return Utils.OS.SOLARIS;
+-        }
+-        else if (s.contains("sunos"))
+-        {
++        } else if (s.contains("sunos")) {
+             return Utils.OS.SOLARIS;
+-        }
+-        else if (s.contains("linux"))
+-        {
++        } else if (s.contains("linux")) {
+             return Utils.OS.LINUX;
+-        }
+-        else
+-        {
++        } else {
+             return s.contains("unix") ? Utils.OS.LINUX : Utils.OS.UNKNOWN;
+         }
+     }
+ 
+-    public static int find(byte[] buf, byte[] pattern)
+-    {
++    public static int find(byte[] buf, byte[] pattern) {
+         return find(buf, 0, pattern);
+     }
+ 
+-    public static int find(byte[] buf, int index, byte[] pattern)
+-    {
+-        for (int i = index; i < buf.length - pattern.length; ++i)
+-        {
++    public static int find(byte[] buf, int index, byte[] pattern) {
++        for (int i = index; i < buf.length - pattern.length; ++i) {
+             boolean flag = true;
+ 
+-            for (int j = 0; j < pattern.length; ++j)
+-            {
+-                if (pattern[j] != buf[i + j])
+-                {
++            for (int j = 0; j < pattern.length; ++j) {
++                if (pattern[j] != buf[i + j]) {
+                     flag = false;
+                     break;
+                 }
+             }
+ 
+-            if (flag)
+-            {
++            if (flag) {
+                 return i;
+             }
+         }
+@@ -140,17 +95,14 @@
+         return -1;
+     }
+ 
+-    public static byte[] readAll(InputStream is) throws IOException
+-    {
++    public static byte[] readAll(InputStream is) throws IOException {
+         ByteArrayOutputStream bytearrayoutputstream = new ByteArrayOutputStream();
+         byte[] abyte = new byte[1024];
+ 
+-        while (true)
+-        {
++        while (true) {
+             int i = is.read(abyte);
+ 
+-            if (i < 0)
+-            {
++            if (i < 0) {
+                 is.close();
+                 return bytearrayoutputstream.toByteArray();
+             }
+@@ -159,18 +111,15 @@
+         }
+     }
+ 
+-    public static void dbg(String str)
+-    {
++    public static void dbg(String str) {
+         System.out.println(str);
+     }
+ 
+-    public static String[] tokenize(String str, String delim)
+-    {
++    public static String[] tokenize(String str, String delim) {
+         List list = new ArrayList();
+         StringTokenizer stringtokenizer = new StringTokenizer(str, delim);
+ 
+-        while (stringtokenizer.hasMoreTokens())
+-        {
++        while (stringtokenizer.hasMoreTokens()) {
+             String s = stringtokenizer.nextToken();
+             list.add(s);
+         }
+@@ -179,28 +128,22 @@
+         return astring;
+     }
+ 
+-    public static String getExceptionStackTrace(Throwable e)
+-    {
++    public static String getExceptionStackTrace(Throwable e) {
+         StringWriter stringwriter = new StringWriter();
+         PrintWriter printwriter = new PrintWriter(stringwriter);
+         e.printStackTrace(printwriter);
+         printwriter.close();
+ 
+-        try
+-        {
++        try {
+             stringwriter.close();
+-        }
+-        catch (IOException ioexception)
+-        {
++        } catch (IOException ioexception) {
+         }
+ 
+         return stringwriter.getBuffer().toString();
+     }
+ 
+-    public static void copyFile(File fileSrc, File fileDest) throws IOException
+-    {
+-        if (!fileSrc.getCanonicalPath().equals(fileDest.getCanonicalPath()))
+-        {
++    public static void copyFile(File fileSrc, File fileDest) throws IOException {
++        if (!fileSrc.getCanonicalPath().equals(fileDest.getCanonicalPath())) {
+             FileInputStream fileinputstream = new FileInputStream(fileSrc);
+             FileOutputStream fileoutputstream = new FileOutputStream(fileDest);
+             copyAll(fileinputstream, fileoutputstream);
+@@ -210,16 +153,13 @@
+         }
+     }
+ 
+-    public static void copyAll(InputStream is, OutputStream os) throws IOException
+-    {
++    public static void copyAll(InputStream is, OutputStream os) throws IOException {
+         byte[] abyte = new byte[1024];
+ 
+-        while (true)
+-        {
++        while (true) {
+             int i = is.read(abyte);
+ 
+-            if (i < 0)
+-            {
++            if (i < 0) {
+                 return;
+             }
+ 
+@@ -227,39 +167,32 @@
+         }
+     }
+ 
+-    public static void showMessage(String msg)
+-    {
+-        JOptionPane.showMessageDialog((Component)null, msg, "OptiFine", 1);
++    public static void showMessage(String msg) {
++        JOptionPane.showMessageDialog(null, msg, "OptiFine", 1);
+     }
+ 
+-    public static void showErrorMessage(String msg)
+-    {
+-        JOptionPane.showMessageDialog((Component)null, msg, "Error", 0);
++    public static void showErrorMessage(String msg) {
++        JOptionPane.showMessageDialog(null, msg, "Error", 0);
+     }
+ 
+-    public static String readFile(File file) throws IOException
+-    {
++    public static String readFile(File file) throws IOException {
+         return readFile(file, "ASCII");
+     }
+ 
+-    public static String readFile(File file, String encoding) throws IOException
+-    {
++    public static String readFile(File file, String encoding) throws IOException {
+         FileInputStream fileinputstream = new FileInputStream(file);
+         return readText(fileinputstream, encoding);
+     }
+ 
+-    public static String readText(InputStream in, String encoding) throws IOException
+-    {
++    public static String readText(InputStream in, String encoding) throws IOException {
+         InputStreamReader inputstreamreader = new InputStreamReader(in, encoding);
+         BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+         StringBuffer stringbuffer = new StringBuffer();
+ 
+-        while (true)
+-        {
++        while (true) {
+             String s = bufferedreader.readLine();
+ 
+-            if (s == null)
+-            {
++            if (s == null) {
+                 bufferedreader.close();
+                 inputstreamreader.close();
+                 in.close();
+@@ -271,25 +204,19 @@
+         }
+     }
+ 
+-    public static String[] readLines(InputStream in, String encoding) throws IOException
+-    {
++    public static String[] readLines(InputStream in, String encoding) throws IOException {
+         String s = readText(in, encoding);
+         return tokenize(s, "\n\r");
+     }
+ 
+-    public static void centerWindow(Component c, Component par)
+-    {
+-        if (c != null)
+-        {
++    public static void centerWindow(Component c, Component par) {
++        if (c != null) {
+             Rectangle rectangle = c.getBounds();
+             Rectangle rectangle1;
+ 
+-            if (par != null && par.isVisible())
+-            {
++            if (par != null && par.isVisible()) {
+                 rectangle1 = par.getBounds();
+-            }
+-            else
+-            {
++            } else {
+                 Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+                 rectangle1 = new Rectangle(0, 0, dimension.width, dimension.height);
+             }
+@@ -297,13 +224,11 @@
+             int j = rectangle1.x + (rectangle1.width - rectangle.width) / 2;
+             int i = rectangle1.y + (rectangle1.height - rectangle.height) / 2;
+ 
+-            if (j < 0)
+-            {
++            if (j < 0) {
+                 j = 0;
+             }
+ 
+-            if (i < 0)
+-            {
++            if (i < 0) {
+                 i = 0;
+             }
+ 
+@@ -311,18 +236,13 @@
+         }
+     }
+ 
+-    public static String byteArrayToHexString(byte[] bytes)
+-    {
+-        if (bytes == null)
+-        {
++    public static String byteArrayToHexString(byte[] bytes) {
++        if (bytes == null) {
+             return "";
+-        }
+-        else
+-        {
++        } else {
+             StringBuffer stringbuffer = new StringBuffer();
+ 
+-            for (int i = 0; i < bytes.length; ++i)
+-            {
++            for (int i = 0; i < bytes.length; ++i) {
+                 byte b0 = bytes[i];
+                 stringbuffer.append(hexTable[b0 >> 4 & 15]);
+                 stringbuffer.append(hexTable[b0 & 15]);
+@@ -332,48 +252,32 @@
+         }
+     }
+ 
+-    public static String arrayToCommaSeparatedString(Object[] arr)
+-    {
+-        if (arr == null)
+-        {
++    public static String arrayToCommaSeparatedString(Object[] arr) {
++        if (arr == null) {
+             return "";
+-        }
+-        else
+-        {
++        } else {
+             StringBuffer stringbuffer = new StringBuffer();
+ 
+-            for (int i = 0; i < arr.length; ++i)
+-            {
++            for (int i = 0; i < arr.length; ++i) {
+                 Object object = arr[i];
+ 
+-                if (i > 0)
+-                {
++                if (i > 0) {
+                     stringbuffer.append(", ");
+                 }
+ 
+-                if (object == null)
+-                {
++                if (object == null) {
+                     stringbuffer.append("null");
+-                }
+-                else if (!object.getClass().isArray())
+-                {
++                } else if (!object.getClass().isArray()) {
+                     stringbuffer.append(arr[i]);
+-                }
+-                else
+-                {
++                } else {
+                     stringbuffer.append("[");
+ 
+-                    if (object instanceof Object[])
+-                    {
++                    if (object instanceof Object[]) {
+                         Object[] aobject = (Object[]) object;
+                         stringbuffer.append(arrayToCommaSeparatedString(aobject));
+-                    }
+-                    else
+-                    {
+-                        for (int j = 0; j < Array.getLength(object); ++j)
+-                        {
+-                            if (j > 0)
+-                            {
++                    } else {
++                        for (int j = 0; j < Array.getLength(object); ++j) {
++                            if (j > 0) {
+                                 stringbuffer.append(", ");
+                             }
+ 
+@@ -389,197 +293,142 @@
+         }
+     }
+ 
+-    public static String removePrefix(String str, String prefix)
+-    {
+-        if (str != null && prefix != null)
+-        {
+-            if (str.startsWith(prefix))
+-            {
++    public static String removePrefix(String str, String prefix) {
++        if (str != null && prefix != null) {
++            if (str.startsWith(prefix)) {
+                 str = str.substring(prefix.length());
+             }
+ 
+             return str;
+-        }
+-        else
+-        {
++        } else {
+             return str;
+         }
+     }
+ 
+-    public static String removePrefix(String str, String[] prefixes)
+-    {
+-        if (str != null && prefixes != null)
+-        {
++    public static String removePrefix(String str, String[] prefixes) {
++        if (str != null && prefixes != null) {
+             int i = str.length();
+ 
+-            for (int j = 0; j < prefixes.length; ++j)
+-            {
++            for (int j = 0; j < prefixes.length; ++j) {
+                 String s = prefixes[j];
+                 str = removePrefix(str, s);
+ 
+-                if (str.length() != i)
+-                {
++                if (str.length() != i) {
+                     break;
+                 }
+             }
+ 
+             return str;
+-        }
+-        else
+-        {
++        } else {
+             return str;
+         }
+     }
+ 
+-    public static String removeSuffix(String str, String suffix)
+-    {
+-        if (str != null && suffix != null)
+-        {
+-            if (str.endsWith(suffix))
+-            {
++    public static String removeSuffix(String str, String suffix) {
++        if (str != null && suffix != null) {
++            if (str.endsWith(suffix)) {
+                 str = str.substring(0, str.length() - suffix.length());
+             }
+ 
+             return str;
+-        }
+-        else
+-        {
++        } else {
+             return str;
+         }
+     }
+ 
+-    public static String removeSuffix(String str, String[] suffixes)
+-    {
+-        if (str != null && suffixes != null)
+-        {
++    public static String removeSuffix(String str, String[] suffixes) {
++        if (str != null && suffixes != null) {
+             int i = str.length();
+ 
+-            for (int j = 0; j < suffixes.length; ++j)
+-            {
++            for (int j = 0; j < suffixes.length; ++j) {
+                 String s = suffixes[j];
+                 str = removeSuffix(str, s);
+ 
+-                if (str.length() != i)
+-                {
++                if (str.length() != i) {
+                     break;
+                 }
+             }
+ 
+             return str;
+-        }
+-        else
+-        {
++        } else {
+             return str;
+         }
+     }
+ 
+-    public static String ensurePrefix(String str, String prefix)
+-    {
+-        if (str != null && prefix != null)
+-        {
+-            if (!str.startsWith(prefix))
+-            {
++    public static String ensurePrefix(String str, String prefix) {
++        if (str != null && prefix != null) {
++            if (!str.startsWith(prefix)) {
+                 str = prefix + str;
+             }
+ 
+             return str;
+-        }
+-        else
+-        {
++        } else {
+             return str;
+         }
+     }
+ 
+-    public static boolean equals(Object o1, Object o2)
+-    {
+-        if (o1 == o2)
+-        {
++    public static boolean equals(Object o1, Object o2) {
++        if (o1 == o2) {
+             return true;
+-        }
+-        else
+-        {
+-            return o1 == null ? false : o1.equals(o2);
++        } else {
++            return o1 != null && o1.equals(o2);
+         }
+     }
+ 
+-    public static int parseInt(String str, int defVal)
+-    {
+-        try
+-        {
+-            if (str == null)
+-            {
++    public static int parseInt(String str, int defVal) {
++        try {
++            if (str == null) {
+                 return defVal;
+-            }
+-            else
+-            {
++            } else {
+                 str = str.trim();
+                 return Integer.parseInt(str);
+             }
+-        }
+-        catch (NumberFormatException numberformatexception)
+-        {
++        } catch (NumberFormatException numberformatexception) {
+             return defVal;
+         }
+     }
+ 
+-    public static boolean equalsMask(String str, String mask, char wildChar)
+-    {
+-        if (mask != null && str != null)
+-        {
+-            if (mask.indexOf(wildChar) < 0)
+-            {
++    public static boolean equalsMask(String str, String mask, char wildChar) {
++        if (mask != null && str != null) {
++            if (mask.indexOf(wildChar) < 0) {
+                 return mask.equals(str);
+-            }
+-            else
+-            {
++            } else {
+                 List list = new ArrayList();
+                 String s = "" + wildChar;
+ 
+-                if (mask.startsWith(s))
+-                {
++                if (mask.startsWith(s)) {
+                     list.add("");
+                 }
+ 
+                 StringTokenizer stringtokenizer = new StringTokenizer(mask, s);
+ 
+-                while (stringtokenizer.hasMoreElements())
+-                {
++                while (stringtokenizer.hasMoreElements()) {
+                     list.add(stringtokenizer.nextToken());
+                 }
+ 
+-                if (mask.endsWith(s))
+-                {
++                if (mask.endsWith(s)) {
+                     list.add("");
+                 }
+ 
+-                String s1 = (String)list.get(0);
++                String s1 = (String) list.get(0);
+ 
+-                if (!str.startsWith(s1))
+-                {
++                if (!str.startsWith(s1)) {
+                     return false;
+-                }
+-                else
+-                {
+-                    String s2 = (String)list.get(list.size() - 1);
++                } else {
++                    String s2 = (String) list.get(list.size() - 1);
+ 
+-                    if (!str.endsWith(s2))
+-                    {
++                    if (!str.endsWith(s2)) {
+                         return false;
+-                    }
+-                    else
+-                    {
++                    } else {
+                         int i = 0;
+ 
+-                        for (int j = 0; j < list.size(); ++j)
+-                        {
+-                            String s3 = (String)list.get(j);
++                        for (int j = 0; j < list.size(); ++j) {
++                            String s3 = (String) list.get(j);
+ 
+-                            if (s3.length() > 0)
+-                            {
++                            if (s3.length() > 0) {
+                                 int k = str.indexOf(s3, i);
+ 
+-                                if (k < 0)
+-                                {
++                                if (k < 0) {
+                                     return false;
+                                 }
+ 
+@@ -591,21 +440,15 @@
+                     }
+                 }
+             }
+-        }
+-        else
+-        {
++        } else {
+             return mask == str;
+         }
+     }
+ 
+-    public static Object[] addObjectToArray(Object[] arr, Object obj)
+-    {
+-        if (arr == null)
+-        {
++    public static Object[] addObjectToArray(Object[] arr, Object obj) {
++        if (arr == null) {
+             throw new NullPointerException("The given array is NULL");
+-        }
+-        else
+-        {
++        } else {
+             int i = arr.length;
+             int j = i + 1;
+             Object[] aobject = (Object[]) Array.newInstance(arr.getClass().getComponentType(), j);
+@@ -615,26 +458,19 @@
+         }
+     }
+ 
+-    public static Object[] addObjectToArray(Object[] arr, Object obj, int index)
+-    {
++    public static Object[] addObjectToArray(Object[] arr, Object obj, int index) {
+         List list = new ArrayList<>(Arrays.asList(arr));
+         list.add(index, obj);
+         Object[] aobject = (Object[]) Array.newInstance(arr.getClass().getComponentType(), list.size());
+         return list.toArray(aobject);
+     }
+ 
+-    public static Object[] addObjectsToArray(Object[] arr, Object[] objs)
+-    {
+-        if (arr == null)
+-        {
++    public static Object[] addObjectsToArray(Object[] arr, Object[] objs) {
++        if (arr == null) {
+             throw new NullPointerException("The given array is NULL");
+-        }
+-        else if (objs.length == 0)
+-        {
++        } else if (objs.length == 0) {
+             return arr;
+-        }
+-        else
+-        {
++        } else {
+             int i = arr.length;
+             int j = i + objs.length;
+             Object[] aobject = (Object[]) Array.newInstance(arr.getClass().getComponentType(), j);
+@@ -644,40 +480,30 @@
+         }
+     }
+ 
+-    public static Object[] removeObjectFromArray(Object[] arr, Object obj)
+-    {
++    public static Object[] removeObjectFromArray(Object[] arr, Object obj) {
+         List list = new ArrayList<>(Arrays.asList(arr));
+         list.remove(obj);
+         return collectionToArray(list, arr.getClass().getComponentType());
+     }
+ 
+-    public static Object[] collectionToArray(Collection coll, Class elementClass)
+-    {
+-        if (coll == null)
+-        {
++    public static Object[] collectionToArray(Collection coll, Class elementClass) {
++        if (coll == null) {
+             return null;
+-        }
+-        else if (elementClass == null)
+-        {
++        } else if (elementClass == null) {
+             return null;
+-        }
+-        else if (elementClass.isPrimitive())
+-        {
++        } else if (elementClass.isPrimitive()) {
+             throw new IllegalArgumentException("Can not make arrays with primitive elements (int, double), element class: " + elementClass);
+-        }
+-        else
+-        {
++        } else {
+             Object[] aobject = (Object[]) Array.newInstance(elementClass, coll.size());
+             return coll.toArray(aobject);
+         }
+     }
+ 
+-    public static enum OS
+-    {
++    public enum OS {
+         LINUX,
+         SOLARIS,
+         WINDOWS,
+         MACOS,
+-        UNKNOWN;
++        UNKNOWN
+     }
+ }

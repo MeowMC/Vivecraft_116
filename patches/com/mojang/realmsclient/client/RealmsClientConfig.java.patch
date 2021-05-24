@@ -1,0 +1,26 @@
+--- a/com/mojang/realmsclient/client/RealmsClientConfig.java
++++ b/com/mojang/realmsclient/client/RealmsClientConfig.java
+@@ -2,19 +2,15 @@
+ 
+ import java.net.Proxy;
+ 
+-public class RealmsClientConfig
+-{
++public class RealmsClientConfig {
+     private static Proxy field_224897_a;
+ 
+-    public static Proxy func_224895_a()
+-    {
++    public static Proxy func_224895_a() {
+         return field_224897_a;
+     }
+ 
+-    public static void func_224896_a(Proxy p_224896_0_)
+-    {
+-        if (field_224897_a == null)
+-        {
++    public static void func_224896_a(Proxy p_224896_0_) {
++        if (field_224897_a == null) {
+             field_224897_a = p_224896_0_;
+         }
+     }

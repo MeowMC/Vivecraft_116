@@ -1,0 +1,12 @@
+--- a/optifine/json/ContainerFactory.java
++++ b/optifine/json/ContainerFactory.java
+@@ -3,8 +3,7 @@
+ import java.util.List;
+ import java.util.Map;
+ 
+-public interface ContainerFactory
+-{
++public interface ContainerFactory {
+     Map createObjectContainer();
+ 
+     List creatArrayContainer();

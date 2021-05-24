@@ -1,50 +1,34 @@
 package org.vivecraft.gui.framework;
 
-import java.util.function.BiFunction;
-
-import org.vivecraft.settings.VRSettings;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.math.vector.Vector2f;
 import net.optifine.Lang;
+import org.vivecraft.settings.VRSettings;
 
-public class VROptionLayout
-{
-    public enum Position
-    {
-        POS_LEFT,
-        POS_CENTER,
-        POS_RIGHT,
-    }
+import java.util.function.BiFunction;
 
+public class VROptionLayout {
     public static final boolean ENABLED = true;
     public static final boolean DISABLED = false;
-
-    private VRSettings.VrOptions _e;
+    public boolean _enabled;
     Position _pos;
     float _row;
-    public boolean _enabled;
     String _title = "";
     int _ordinal;
-
     boolean _defaultb;
-
     float _defaultf;
     float _maxf;
     float _minf;
     float _incrementf;
-
     int _defaulti;
     int _maxi;
     int _mini;
     int _incrementi;
-
     Class<? extends Screen> screen;
     BiFunction<GuiVROptionButton, Vector2f, Boolean> customHandler;
-
-    public VROptionLayout(VRSettings.VrOptions e, BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title)
-    {
+    private VRSettings.VrOptions _e;
+    public VROptionLayout(VRSettings.VrOptions e, BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title) {
         _e = e;
         _pos = pos;
         _row = row;
@@ -53,9 +37,8 @@ public class VROptionLayout
         _enabled = enabled;
         this.customHandler = handler;
     }
-    
-    public VROptionLayout(VRSettings.VrOptions e, Position pos, float row, boolean enabled, String title)
-    {
+
+    public VROptionLayout(VRSettings.VrOptions e, Position pos, float row, boolean enabled, String title) {
         _e = e;
         _pos = pos;
         _row = row;
@@ -64,8 +47,7 @@ public class VROptionLayout
         _enabled = enabled;
     }
 
-    public VROptionLayout(Class<? extends Screen> screen, BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title)
-    {
+    public VROptionLayout(Class<? extends Screen> screen, BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title) {
         _pos = pos;
         _row = row;
         if (title != null)
@@ -74,9 +56,8 @@ public class VROptionLayout
         this.screen = screen;
         this.customHandler = handler;
     }
-    
-    public VROptionLayout(Class<? extends Screen> screen, Position pos, float row, boolean enabled, String title)
-    {
+
+    public VROptionLayout(Class<? extends Screen> screen, Position pos, float row, boolean enabled, String title) {
         _pos = pos;
         _row = row;
         if (title != null)
@@ -85,8 +66,7 @@ public class VROptionLayout
         this.screen = screen;
     }
 
-    public VROptionLayout(BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title)
-    {
+    public VROptionLayout(BiFunction<GuiVROptionButton, Vector2f, Boolean> handler, Position pos, float row, boolean enabled, String title) {
         _pos = pos;
         _row = row;
         if (title != null)
@@ -94,9 +74,8 @@ public class VROptionLayout
         _enabled = enabled;
         this.customHandler = handler;
     }
-    
-    public VROptionLayout(int ordinal, Position pos, float row, boolean enabled, String title)
-    {
+
+    public VROptionLayout(int ordinal, Position pos, float row, boolean enabled, String title) {
         _ordinal = ordinal;
         _pos = pos;
         _row = row;
@@ -104,8 +83,7 @@ public class VROptionLayout
         _enabled = enabled;
     }
 
-    public int getX(int screenWidth)
-    {
+    public int getX(int screenWidth) {
         if (_pos == Position.POS_LEFT)
             return screenWidth / 2 - 155 + 0 * 160;
         else if (_pos == Position.POS_RIGHT)
@@ -114,42 +92,41 @@ public class VROptionLayout
             return screenWidth / 2 - 155 + 1 * 160 / 2;
     }
 
-    public int getY(int screenHeight)
-    {
-        return (int)Math.ceil(screenHeight / 6 + 21 * _row - 10);
+    public int getY(int screenHeight) {
+        return (int) Math.ceil(screenHeight / 6 + 21 * _row - 10);
     }
 
-    public String getButtonText()
-    {
-        if (_title.isEmpty())
-        {
+    public String getButtonText() {
+        if (_title.isEmpty()) {
             if (_e != null)
                 return Minecraft.getInstance().vrSettings.getButtonDisplayString(_e);
         }
 
         return Lang.get(_title);
     }
-    
-    public VRSettings.VrOptions getOption()
-    {
-    	return _e;
-    }
-    
-    public Class<? extends Screen> getScreen()
-    {
-    	return screen;
+
+    public VRSettings.VrOptions getOption() {
+        return _e;
     }
 
-    public BiFunction<GuiVROptionButton, Vector2f, Boolean> getCustomHandler()
-    {
+    public Class<? extends Screen> getScreen() {
+        return screen;
+    }
+
+    public BiFunction<GuiVROptionButton, Vector2f, Boolean> getCustomHandler() {
         return customHandler;
     }
-    
-    public int getOrdinal()
-    {
+
+    public int getOrdinal() {
         if (_e == null)
             return _ordinal;
         else
             return _e.returnEnumOrdinal();
+    }
+
+    public enum Position {
+        POS_LEFT,
+        POS_CENTER,
+        POS_RIGHT,
     }
 }

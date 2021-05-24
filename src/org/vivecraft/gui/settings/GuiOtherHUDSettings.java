@@ -1,16 +1,14 @@
 package org.vivecraft.gui.settings;
 
+import net.minecraft.client.gui.screen.Screen;
+import net.minecraft.client.gui.widget.Widget;
 import org.vivecraft.gui.framework.GuiVROptionButton;
 import org.vivecraft.gui.framework.GuiVROptionsBase;
 import org.vivecraft.settings.VRSettings;
 
-import net.minecraft.client.gui.screen.Screen;
-import net.minecraft.client.gui.widget.Widget;
-
-public class GuiOtherHUDSettings extends GuiVROptionsBase
-{
+public class GuiOtherHUDSettings extends GuiVROptionsBase {
     // VIVE START - hide options not supported by tracked controller UI
-    static VRSettings.VrOptions[] hudOptions = new VRSettings.VrOptions[] {
+    static VRSettings.VrOptions[] hudOptions = new VRSettings.VrOptions[]{
             VRSettings.VrOptions.CROSSHAIR_SCALE,
             VRSettings.VrOptions.RENDER_CROSSHAIR_MODE,
             //VRSettings.VrOptions.CROSSHAIR_ROLL,
@@ -22,22 +20,21 @@ public class GuiOtherHUDSettings extends GuiVROptionsBase
             VRSettings.VrOptions.CHAT_NOTIFICATIONS
     };
 
-    static VRSettings.VrOptions[] chat = new VRSettings.VrOptions[] {
-            VRSettings.VrOptions.CHAT_NOTIFICATION_SOUND      
+    static VRSettings.VrOptions[] chat = new VRSettings.VrOptions[]{
+            VRSettings.VrOptions.CHAT_NOTIFICATION_SOUND
     };
 
     public GuiOtherHUDSettings(Screen guiScreen) {
-        super( guiScreen );
+        super(guiScreen);
     }
 
     @Override
-    public void init()
-    {
-    	vrTitle = "vivecraft.options.screen.guiother";
-    	super.init(hudOptions, true);  
-    	if(minecraft.vrSettings.chatNotifications > 1)
-    		super.init(chat, false);
-    	super.addDefaultButtons();
+    public void init() {
+        vrTitle = "vivecraft.options.screen.guiother";
+        super.init(hudOptions, true);
+        if (minecraft.vrSettings.chatNotifications > 1)
+            super.init(chat, false);
+        super.addDefaultButtons();
     }
 
     @Override
@@ -51,12 +48,13 @@ public class GuiOtherHUDSettings extends GuiVROptionsBase
         this.settings.chatNotifications = VRSettings.CHAT_NOTIFICATIONS_NONE;
         this.settings.chatNotificationSound = "block.note_block.bell";
     }
-	@Override
-	
-	protected void actionPerformed(Widget widget) {
-		if(!(widget instanceof GuiVROptionButton)) return;
-		GuiVROptionButton button = (GuiVROptionButton) widget;
-		if (button.id == VRSettings.VrOptions.CHAT_NOTIFICATIONS.ordinal())
-			this.reinit = true;
-	}
+
+    @Override
+
+    protected void actionPerformed(Widget widget) {
+        if (!(widget instanceof GuiVROptionButton)) return;
+        GuiVROptionButton button = (GuiVROptionButton) widget;
+        if (button.id == VRSettings.VrOptions.CHAT_NOTIFICATIONS.ordinal())
+            this.reinit = true;
+    }
 }

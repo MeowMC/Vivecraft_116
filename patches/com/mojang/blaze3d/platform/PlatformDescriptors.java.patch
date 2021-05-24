@@ -1,0 +1,32 @@
+--- a/com/mojang/blaze3d/platform/PlatformDescriptors.java
++++ b/com/mojang/blaze3d/platform/PlatformDescriptors.java
+@@ -1,24 +1,19 @@
+ package com.mojang.blaze3d.platform;
+ 
+-public class PlatformDescriptors
+-{
+-    public static String getGlVendor()
+-    {
++public class PlatformDescriptors {
++    public static String getGlVendor() {
+         return GlStateManager.getString(7936);
+     }
+ 
+-    public static String getCpuInfo()
+-    {
++    public static String getCpuInfo() {
+         return GLX._getCpuInfo();
+     }
+ 
+-    public static String getGlRenderer()
+-    {
++    public static String getGlRenderer() {
+         return GlStateManager.getString(7937);
+     }
+ 
+-    public static String getGlVersion()
+-    {
++    public static String getGlVersion() {
+         return GlStateManager.getString(7938);
+     }
+ }

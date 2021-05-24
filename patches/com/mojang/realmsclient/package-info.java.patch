@@ -1,0 +1,9 @@
+--- a/com/mojang/realmsclient/package-info.java
++++ b/com/mojang/realmsclient/package-info.java
+@@ -3,4 +3,5 @@
+ package com.mojang.realmsclient;
+ 
+ import mcp.MethodsReturnNonnullByDefault;
++
+ import javax.annotation.ParametersAreNonnullByDefault;
+\ No newline at end of file

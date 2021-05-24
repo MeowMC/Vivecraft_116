@@ -1,0 +1,24 @@
+--- a/com/mojang/blaze3d/Empty3i.java
++++ b/com/mojang/blaze3d/Empty3i.java
+@@ -2,18 +2,17 @@
+ 
+ import com.google.common.collect.ImmutableList;
+ import com.mojang.blaze3d.systems.IRenderCall;
++
+ import java.util.List;
+ import java.util.concurrent.ConcurrentLinkedQueue;
+ 
+-public class Empty3i
+-{
++public class Empty3i {
+     private final List<ConcurrentLinkedQueue<IRenderCall>> linkedRenderCalls = ImmutableList.of(new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>(), new ConcurrentLinkedQueue<>());
+     private volatile int x;
+     private volatile int y;
+     private volatile int z;
+ 
+-    public Empty3i()
+-    {
++    public Empty3i() {
+         this.x = this.y = this.z + 1;
+     }
+ }

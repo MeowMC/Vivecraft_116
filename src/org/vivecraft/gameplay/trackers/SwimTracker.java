@@ -9,38 +9,34 @@ import net.minecraft.util.math.vector.Vector3d;
  */
 public class SwimTracker extends Tracker {
 
-	Vector3d motion=Vector3d.ZERO;
-	double friction=0.9f;
+    final double riseSpeed = 0.005f;
+    Vector3d motion = Vector3d.ZERO;
+    double friction = 0.9f;
+    double lastDist;
+    double swimspeed = 1.3f;
 
-	double lastDist;
+    public SwimTracker(Minecraft mc) {
+        super(mc);
+    }
 
-	final double riseSpeed=0.005f;
-	double swimspeed=1.3f;
+    public boolean isActive(ClientPlayerEntity p) {
+        if (mc.vrSettings.seated)
+            return false;
+        if (!mc.vrSettings.realisticSwimEnabled)
+            return false;
+        if (mc.currentScreen != null)
+            return false;
+        if (p == null || !p.isAlive())
+            return false;
+        if (mc.playerController == null) return false;
+        if (!p.isInWater() && !p.isInLava())
+            return false;
+        if (p.moveForward > 0)
+            return false;
+        return !(p.moveStrafing > 0);
+    }
 
-	public SwimTracker(Minecraft mc) {
-		super(mc);
-	}
-
-	public boolean isActive(ClientPlayerEntity p){
-		if(mc.vrSettings.seated)
-			return false;
-		if(!mc.vrSettings.realisticSwimEnabled)
-			return false;
-		if(mc.currentScreen != null)
-			return false;
-		if(p==null || !p.isAlive())
-			return false;
-		if(mc.playerController == null) return false;
-		if(!p.isInWater() && !p.isInLava())
-			return false;
-		if(p.moveForward > 0)
-			return false;
-		if(p.moveStrafing > 0)
-			return false;
-		return true;
-	}
-
-	public void doProcess(ClientPlayerEntity player){
+    public void doProcess(ClientPlayerEntity player) {
 
 //		{//float
 //			//remove bouyancy for now.
@@ -85,35 +81,35 @@ public class SwimTracker extends Tracker {
 //			}
 
 //		}
-		{//swim
+        {//swim
 
-			Vector3d controllerR= mc.vrPlayer.vrdata_world_pre.getController(0).getPosition();
-			Vector3d controllerL= mc.vrPlayer.vrdata_world_pre.getController(1).getPosition();
-			
-			Vector3d middle= controllerL.subtract(controllerR).scale(0.5).add(controllerR);
+            Vector3d controllerR = mc.vrPlayer.vrdata_world_pre.getController(0).getPosition();
+            Vector3d controllerL = mc.vrPlayer.vrdata_world_pre.getController(1).getPosition();
 
-			Vector3d hmdPos=mc.vrPlayer.vrdata_world_pre.getHeadPivot().subtract(0,0.3,0);
+            Vector3d middle = controllerL.subtract(controllerR).scale(0.5).add(controllerR);
 
-			Vector3d movedir=middle.subtract(hmdPos).normalize().add(
-					mc.vrPlayer.vrdata_world_pre.hmd.getDirection()).scale(0.5);
+            Vector3d hmdPos = mc.vrPlayer.vrdata_world_pre.getHeadPivot().subtract(0, 0.3, 0);
 
-			Vector3d contollerDir= mc.vrPlayer.vrdata_world_pre.getController(0).getCustomVector(new Vector3d(0,0,-1)).add(
-					mc.vrPlayer.vrdata_world_pre.getController(1).getCustomVector(new Vector3d(0,0,-1))).scale(0.5);
-			double dirfactor=contollerDir.add(movedir).length()/2;
+            Vector3d movedir = middle.subtract(hmdPos).normalize().add(
+                    mc.vrPlayer.vrdata_world_pre.hmd.getDirection()).scale(0.5);
 
-			double distance= hmdPos.distanceTo(middle);
-			double distDelta=lastDist-distance;
+            Vector3d contollerDir = mc.vrPlayer.vrdata_world_pre.getController(0).getCustomVector(new Vector3d(0, 0, -1)).add(
+                    mc.vrPlayer.vrdata_world_pre.getController(1).getCustomVector(new Vector3d(0, 0, -1))).scale(0.5);
+            double dirfactor = contollerDir.add(movedir).length() / 2;
 
-			if(distDelta>0){
-				Vector3d velo=movedir.scale(distDelta*swimspeed*dirfactor);
-				motion=motion.add(velo.scale(0.15));
-			}
+            double distance = hmdPos.distanceTo(middle);
+            double distDelta = lastDist - distance;
 
-			lastDist=distance;
-			player.setSwimming(motion.length() > 0.3f);
-			player.setSprinting(motion.length() > 1.0f);
-			player.addVelocity(motion.x,motion.y,motion.z);
-			motion=motion.scale(friction);
-		}
-	}
+            if (distDelta > 0) {
+                Vector3d velo = movedir.scale(distDelta * swimspeed * dirfactor);
+                motion = motion.add(velo.scale(0.15));
+            }
+
+            lastDist = distance;
+            player.setSwimming(motion.length() > 0.3f);
+            player.setSprinting(motion.length() > 1.0f);
+            player.addVelocity(motion.x, motion.y, motion.z);
+            motion = motion.scale(friction);
+        }
+    }
 }

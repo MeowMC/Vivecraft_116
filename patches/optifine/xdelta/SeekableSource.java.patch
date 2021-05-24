@@ -1,0 +1,12 @@
+--- a/optifine/xdelta/SeekableSource.java
++++ b/optifine/xdelta/SeekableSource.java
+@@ -2,8 +2,7 @@
+ 
+ import java.io.IOException;
+ 
+-public interface SeekableSource
+-{
++public interface SeekableSource {
+     void seek(long var1) throws IOException;
+ 
+     int read(byte[] var1, int var2, int var3) throws IOException;

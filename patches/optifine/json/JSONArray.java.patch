@@ -1,0 +1,125 @@
+--- a/optifine/json/JSONArray.java
++++ b/optifine/json/JSONArray.java
+@@ -6,41 +6,29 @@
+ import java.util.Iterator;
+ import java.util.List;
+ 
+-public class JSONArray extends ArrayList implements List, JSONAware, JSONStreamAware
+-{
++public class JSONArray extends ArrayList implements List, JSONAware, JSONStreamAware {
+     private static final long serialVersionUID = 3957988303675231981L;
+ 
+-    public static void writeJSONString(List list, Writer out) throws IOException
+-    {
+-        if (list == null)
+-        {
++    public static void writeJSONString(List list, Writer out) throws IOException {
++        if (list == null) {
+             out.write("null");
+-        }
+-        else
+-        {
++        } else {
+             boolean flag = true;
+             Iterator iterator = list.iterator();
+             out.write(91);
+ 
+-            while (iterator.hasNext())
+-            {
+-                if (flag)
+-                {
++            while (iterator.hasNext()) {
++                if (flag) {
+                     flag = false;
+-                }
+-                else
+-                {
++                } else {
+                     out.write(44);
+                 }
+ 
+                 Object object = iterator.next();
+ 
+-                if (object == null)
+-                {
++                if (object == null) {
+                     out.write("null");
+-                }
+-                else
+-                {
++                } else {
+                     JSONValue.writeJSONString(object, out);
+                 }
+             }
+@@ -49,43 +37,27 @@
+         }
+     }
+ 
+-    public void writeJSONString(Writer out) throws IOException
+-    {
+-        writeJSONString(this, out);
+-    }
+-
+-    public static String toJSONString(List list)
+-    {
+-        if (list == null)
+-        {
++    public static String toJSONString(List list) {
++        if (list == null) {
+             return "null";
+-        }
+-        else
+-        {
++        } else {
+             boolean flag = true;
+             StringBuffer stringbuffer = new StringBuffer();
+             Iterator iterator = list.iterator();
+             stringbuffer.append('[');
+ 
+-            while (iterator.hasNext())
+-            {
+-                if (flag)
+-                {
++            while (iterator.hasNext()) {
++                if (flag) {
+                     flag = false;
+-                }
+-                else
+-                {
++                } else {
+                     stringbuffer.append(',');
+                 }
+ 
+                 Object object = iterator.next();
+ 
+-                if (object == null)
+-                {
++                if (object == null) {
+                     stringbuffer.append("null");
+-                }
+-                else
+-                {
++                } else {
+                     stringbuffer.append(JSONValue.toJSONString(object));
+                 }
+             }
+@@ -95,13 +67,15 @@
+         }
+     }
+ 
+-    public String toJSONString()
+-    {
++    public void writeJSONString(Writer out) throws IOException {
++        writeJSONString(this, out);
++    }
++
++    public String toJSONString() {
+         return toJSONString(this);
+     }
+ 
+-    public String toString()
+-    {
++    public String toString() {
+         return this.toJSONString();
+     }
+ }
